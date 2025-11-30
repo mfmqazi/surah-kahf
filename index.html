@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surat-ul-Kahf | The Illumination</title>
+    <meta name="description"
+        content="Recite and learn the first 10 and last 10 verses of Surat-ul-Kahf with audio, translation, and transliteration.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="background-glow"></div>
+
+    <header>
+        <nav class="glass-panel">
+            <div class="logo">Surat-ul-Kahf</div>
+            <div class="controls">
+                <select id="reciterSelect" aria-label="Select Reciter">
+                    <option value="ar.alafasy">Mishary Rashid Alafasy</option>
+                    <option value="ar.abdulbasit">Abdul Basit</option>
+                    <option value="ar.sudais">Abdur-Rahman as-Sudais</option>
+                    <option value="ar.husary">Mahmoud Khalil Al-Husary</option>
+                </select>
+                <select id="translationSelect" aria-label="Select Translation">
+                    <option value="en.sahih">Sahih International</option>
+                    <option value="en.yusufali">Yusuf Ali</option>
+                    <option value="en.pickthall">Pickthall</option>
+                </select>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="hero-section">
+            <div class="hero-content">
+                <h1>The Protection Against Dajjal</h1>
+                <div id="hadith-container" class="hadith-card glass-panel">
+                    <!-- Hadith will be injected here -->
+                </div>
+            </div>
+        </section>
+
+        <section id="player-section" class="player-section glass-panel">
+            <div class="audio-controls">
+                <button id="playBtn" class="play-btn">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor" d="M8 5v14l11-7z" />
+                    </svg>
+                    Play Audio
+                </button>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <span id="timeDisplay">00:00 / 00:00</span>
+            </div>
+            <audio id="audioPlayer"></audio>
+        </section>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-target="first-10">First 10 Ayat</button>
+            <button class="tab-btn" data-target="last-10">Last 10 Ayat</button>
+            <button class="tab-btn" data-target="full-surah">Full Surah</button>
+        </div>
+
+        <section id="content-display" class="content-container">
+            <div id="first-10" class="verses-container active">
+                <!-- Verses will be injected here -->
+                <div class="loading">Loading verses...</div>
+            </div>
+            <div id="last-10" class="verses-container">
+                <!-- Verses will be injected here -->
+                <div class="loading">Loading verses...</div>
+            </div>
+            <div id="full-surah" class="verses-container">
+                <!-- Verses will be injected here -->
+                <div class="loading">Loading verses...</div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Made with ❤️ for the Ummah</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
