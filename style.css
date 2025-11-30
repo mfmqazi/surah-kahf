@@ -279,6 +279,22 @@ h1 {
     font-weight: 300;
 }
 
+.arabic-text {
+    font-family: var(--font-arabic);
+    font-size: 2.2rem;
+    text-align: right;
+    line-height: 2.2;
+    margin-bottom: 1.5rem;
+    color: var(--text-main);
+}
+
+.transliteration {
+    color: var(--accent-gold);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 300;
+}
+
 .translation {
     color: var(--text-muted);
     font-size: 1.1rem;

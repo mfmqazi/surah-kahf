@@ -111,7 +111,9 @@ async function loadVerses() {
 async function fetchVerses(start, end) {
     // Fetch verses with Audio, Translation, and Transliteration (Resource 57)
     // Note: We request the specific translation ID.
-    const url = `${API_BASE}/verses/by_chapter/18?language=en&translations=${currentTranslation},57&audio=${currentReciter}&per_page=${end - start + 1}&offset=${start - 1}&fields=text_uthmani,chapter_id`;
+    const perPage = end - start + 1;
+    const page = Math.floor((start - 1) / perPage) + 1;
+    const url = `${API_BASE}/verses/by_chapter/18?language=en&translations=${currentTranslation},57&audio=${currentReciter}&per_page=${perPage}&page=${page}&fields=text_uthmani,chapter_id`;
 
     const response = await fetch(url);
     if (!response.ok) throw new Error('Network response was not ok');
