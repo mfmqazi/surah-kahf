@@ -64,7 +64,6 @@ function startHadithRotation() {
 }
 
 function showRandomHadith() {
-    // Fade out effect could be added here, but for now just swap
     const randomIndex = Math.floor(Math.random() * hadiths.length);
     const hadith = hadiths[randomIndex];
 
@@ -109,9 +108,8 @@ async function loadVerses() {
 }
 
 async function fetchVerses(start, end) {
-    // Fetch verses with Audio, Translation, and Transliteration (Resource 57)
-    // Note: We request the specific translation ID.
-    const url = `${API_BASE}/verses/by_chapter/18?language=en&translations=${currentTranslation},57&audio=${currentReciter}&per_page=${end - start + 1}&offset=${start - 1}&fields=text_uthmani,chapter_id`;
+    // Fetch verses with Audio, Translation, Transliteration, and Words (for verse markers)
+    const url = `${API_BASE}/verses/by_chapter/18?language=en&translations=${currentTranslation},57&audio=${currentReciter}&words=true&per_page=${end - start + 1}&offset=${start - 1}&fields=text_uthmani,chapter_id`;
 
     const response = await fetch(url);
     if (!response.ok) throw new Error('Network response was not ok');
@@ -119,18 +117,17 @@ async function fetchVerses(start, end) {
 
     return data.verses.map(verse => {
         // Extract Translation
-        // Filter out transliteration (id 57) to find actual translations
         const availableTranslations = verse.translations?.filter(t => t.resource_id !== 57);
-
-        // Try to find the selected translation, or fallback to the first available one
-        // We use loose equality for resource_id match just in case of string/number diff
         let translationObj = availableTranslations?.find(t => t.resource_id == currentTranslation) || availableTranslations?.[0];
-
         const translation = (translationObj?.text || "Translation unavailable").replace(/<[^>]*>/g, '');
 
         // Extract Transliteration
         const transliterationObj = verse.translations?.find(t => t.resource_id == 57);
         const transliteration = (transliterationObj?.text || "").replace(/<[^>]*>/g, '');
+
+        // Extract verse ending marker from words
+        const endMarker = verse.words?.find(w => w.char_type_name === 'end');
+        const verseMarker = endMarker?.text_uthmani || '';
 
         return {
             id: verse.id,
@@ -139,7 +136,8 @@ async function fetchVerses(start, end) {
             text: verse.text_uthmani,
             translation: translation,
             transliteration: transliteration,
-            audioUrl: verse.audio?.url
+            audioUrl: verse.audio?.url,
+            verseMarker: verseMarker
         };
     });
 }
@@ -158,7 +156,7 @@ function renderVerses(verses, container) {
                     <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>
                 </button>
             </div>
-            <div class="arabic-text">${verse.text}</div>
+            <div class="arabic-text">${verse.text} <span class="verse-marker">${verse.verseMarker}</span></div>
             <div class="transliteration">${verse.transliteration}</div>
             <div class="translation">${verse.translation}</div>
         `;
@@ -213,7 +211,7 @@ function setupEventListeners() {
 
     translationSelect.addEventListener('change', (e) => {
         const map = {
-            'en.sahih': 85, // Updated to 85
+            'en.sahih': 85,
             'en.yusufali': 22,
             'en.pickthall': 19
         };
@@ -313,9 +311,6 @@ window.playSingleVerse = (key) => {
         currentAudioIndex = index;
         playVerseAtIndex(index);
     } else {
-        // If not in current queue (e.g. clicking verse in other tab? unlikely if hidden), 
-        // check if it's in the other list and switch?
-        // For now, assume user only clicks visible verses.
         console.warn('Verse not found in current queue');
     }
 };
