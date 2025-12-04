@@ -8,6 +8,14 @@ let currentAudioIndex = 0;
 let isPlaying = false;
 let hadithInterval;
 
+// Tab Progress State
+let currentTab = 'first-10';
+let tabProgress = {
+    'first-10': 0,
+    'last-10': 0,
+    'full-surah': 0
+};
+
 // Data Cache
 let first10Data = [];
 let last10Data = [];
@@ -181,6 +189,10 @@ function setupEventListeners() {
             const targetId = btn.getAttribute('data-target');
             document.getElementById(targetId).classList.add('active');
 
+            // Save progress of current tab before switching
+            tabProgress[currentTab] = currentAudioIndex;
+            currentTab = targetId;
+
             // Update Audio Queue based on tab
             if (targetId === 'first-10') {
                 updateAudioQueue(first10Data);
@@ -190,7 +202,12 @@ function setupEventListeners() {
                 updateAudioQueue(fullSurahData);
             }
 
+            // Restore progress for new tab
+            currentAudioIndex = tabProgress[currentTab];
+
             stopAudio();
+            // Clear the source so it doesn't resume the previous track
+            audioPlayer.removeAttribute('src');
         });
     });
 
@@ -226,7 +243,6 @@ function setupEventListeners() {
 
 function updateAudioQueue(verses) {
     audioQueue = verses;
-    currentAudioIndex = 0;
 }
 
 function togglePlay() {
